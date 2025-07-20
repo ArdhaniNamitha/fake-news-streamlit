@@ -42,13 +42,17 @@ st.markdown("<h1 style='text-align:center;'>📰 Fake News Detection</h1>", unsa
 st.subheader("📌 Enter a news article:")
 user_input = st.text_area("Write news content here 👇")
 
+# ✅ Modified Classification Block with Probabilities
 if st.button("🔍 Classify"):
     if user_input.strip() == "":
         st.warning("Please enter a news article!")
     else:
-        # Predict
         input_vec = vectorizer.transform([user_input])
         prediction = model.predict(input_vec)[0]
+        proba = model.predict_proba(input_vec)[0]  # ✅ Added probability output
+
+        # Show prediction confidence
+        st.write(f"🔢 Prediction probabilities: FAKE = {proba[0]:.2f}, REAL = {proba[1]:.2f}")
 
         result_text = "✅ This news seems **REAL**." if prediction == 1 else "❌ This news seems **FAKE**."
         st.success(result_text)
