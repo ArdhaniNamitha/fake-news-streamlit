@@ -46,11 +46,19 @@ if st.button("🔍 Classify"):
     if user_input.strip() == "":
         st.warning("Please enter a news article!")
     else:
-        input_vec = vectorizer.transform([user_input])
+        # Preprocess input (lowercase)
+        cleaned_input = user_input.lower()
+
+        # Predict
+        input_vec = vectorizer.transform([cleaned_input])
         prediction = model.predict(input_vec)[0]
         proba = model.predict_proba(input_vec)[0]
 
-        st.write(f"🔢 Prediction probabilities: FAKE={proba[0]:.2f}, REAL={proba[1]:.2f}")
+        # Debug output
+        st.write(f"🧪 Raw prediction: {prediction}")
+        st.write(f"📊 Probabilities → FAKE: {proba[0]:.4f}, REAL: {proba[1]:.4f}")
+        st.write(f"🧠 Model classes: {model.classes_}")
+
         result_text = "✅ This news seems **REAL**." if prediction == 1 else "❌ This news seems **FAKE**."
         st.success(result_text)
 
